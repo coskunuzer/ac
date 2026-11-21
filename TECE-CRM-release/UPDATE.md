@@ -1,45 +1,54 @@
-# TECE CRM — server 2.0.0 / web 116
+# TECE CRM — server 2.1.0 / web 117
 
-## Install
-1. **Back up `data/app.db` first.** Two database updates run by themselves at start-up: `089_perf_indexes` (speed indexes, about a second) and `090_event_budgets` (trip/fair budgets, dares, fair-focus states).
-2. Server: unpack `server-full-v200.zip` over the server folder, then `npm run build` and restart. No new packages.
-3. Web: replace the contents of `web/dist` with `web-dist116.zip`. Changed files have new names, so browsers pick them up without clearing the cache.
+## Install (same as last time)
+1. Upload `server-full-v210.zip` and `web-dist117.zip` into `~/exhibition-card-scanner` with File Manager.
+2. In Terminal run `~/crm update` (or `crm-update`). It makes a backup first (database, server code, web), then unpacks, installs, builds and restarts.
+3. Open the CRM and check the menu shows **2.1.0**.
 
-## From your notes
-1. **Dark mode:** a new, calmer palette with readable text everywhere. Light mode is unchanged.
-2. **Red pill with no text** on the customer page ("Next step"): fixed. Two dark themes were clashing and made the text red on red.
-3. **Fair results on the Home page**, plus **Fair focus**: a sprint through one fair's visitors. You see what was said at the stand, give a rating, write a note and set a reminder; Ctrl+Enter saves and opens the next visitor. A visitor can be parked for later or closed. The Fairs page itself is redesigned.
-4. **A budget for every trip and every fair:** planned against spent, per kind of cost, and cost per customer visited or per person met. Expenses typed here are booked on the right line of the marketing budget by themselves.
-5. **Quality** is removed from the menu and from Permissions. The data stays.
-6. **Sena's permissions:** an assistant's own switches are now applied. Before, only the switches of the person she assists were read.
-7. **Calendar drag and drop** for to-dos and meetings, with Undo. CRM meetings now show in the month even without Google Calendar.
+What runs by itself at the first start (it only adds things, nothing is removed):
+- Database updates `091` to `098`: trip notes, budget documents, unverified-customer lists, price performance, coaching reports.
+- `098` puts old priority ratings that were stored as 0–100 onto the 0–10 scale the app uses everywhere else.
+- One new package, `pdf-lib`. `npm install` adds it; the server needs internet for that one time.
 
-## Also asked for during the work
-- **Challenge board on Home:**
-  - Today's points against your goal, your best day, yesterday at the same hour and the colleague just ahead of you.
-  - Dares (Push, Beast, Record) raise today's target; once taken, a dare cannot be lowered.
-  - A score pill in the top bar on every page.
-- **Freight (Nakliye):**
-  - Pano is now a desk that runs request → answers → decide → e-mails → documents, with one button per item.
-  - Quotes are compared side by side, converted to euro, with the price per kg; the best one is approved in one click, after a confirmation.
-  - "Ask for quotes" is one step from the ready-to-ship list.
-- **Proforma for veneer, melamine, aluminium, acrylic and other products:**
-  - Write the product name in the first field of the line and type the price per m²; no SAP colour code is needed.
-  - Each kind prints under its own heading, with its own weight.
-- **Research sprint:** the country can be changed again; it is now a full list plus quick country buttons.
-- **Redesigned screens:** Trips list, trip planner header, Country explorer cards, and the sidebar logo.
-- **Quick dock (To-do / Radar):**
-  - Type a to-do and press Enter; "tomorrow" or "next week" at the end sets the day.
-  - Tick it off, push it to tomorrow, or drag it onto the calendar.
-  - Press T on any page to open the dock.
-- **Help → "What is new"** explains all of the above. Turkish is included for every new text.
+## Your 9 notes
+1. **Trip planner in 3 columns:** customers | days | map. The map is smaller and has an Expand button. Drag customers onto a day.
+2. **Budget report:** one PDF with the summary and every uploaded invoice/receipt behind it. Fair numbers in the Turquality PDF match the fair board.
+3. **Managers see where their staff has been:** a team trips view in Manager mode, with each trip's visits.
+4. **Trip notes per customer:** saved on the customer with the trip's name as a tag, and visible on the customer page.
+5. **Readable buttons and chips:** colours fixed in light and dark mode.
+6. **Trip costs:** the same cost options as fairs, including Turquality, with cost per customer visited.
+7. **Login page:** uses the site's colours.
+8. **View-only customers in your countries:** you can open customers in your responsible countries that a colleague looks after. You can read them but not change them, and a banner says "X looks after them".
+9. **Unverified customers (admin and brand manager):**
+   - Download the list as Excel (Turkish or English headings) and edit it.
+   - Fill an e-mail, website or phone to complete a customer, or delete the row of a company that does not exist.
+   - Upload it back. Nothing changes until you confirm a preview that lists every change.
+   - A customer with orders, offers, notes, calls or a way to reach it is never deleted. Deleted customers go to the junk folder, so they can be brought back.
 
-## Speed and errors (from the usage log)
-- **Faster pages:** Home, the customer list and Follow-ups answer several times faster, because account totals are no longer recomputed on every click by anyone.
-- **Slow-page logging:** new speed indexes, and a watchdog that writes slow server moments into the usage log.
-- **Errors fixed:**
-  - The ~216 `shipping/overview` 404s and ~61 `complaints/open-count` 403s: the menu badges no longer ask for pages that are switched off.
-  - The sprint crash ("reading 'toLowerCase'").
-  - The Leads page 403 for people who cannot upload leads.
-  - The `team/summary` error when no period is given.
-- **Keep-warm ping:** the server now pings itself every 4 minutes so the host does not put it to sleep. To switch it off, set `KEEP_WARM=0` in `.env`.
+## Also asked for
+- **What each customer buys** (Customers → Purchases tab) and **what each country buys** (Countries → Buys): products, kg/m², € per kg or m², colours, 12-month trend charts.
+- **Price performance** next to sales performance (Performance → Price performance). It follows your rule:
+  - € per kg for PVC/ABS/PP, € per m² for melamine/veneer.
+  - 100 = the volume-weighted average of all customers for the same products over the same 12 months.
+  - Everybody sees their own customers: status, success and value.
+- **My team** (managers) and **My performance** (everybody): sales, customers kept, activity, overdue follow-ups and the price index, each compared with the team.
+- **A verdict for each person** (On track / Needs attention / At risk) with the reasons, and **your options** for each one: coach, plan a trip, give their untouched country to someone with time, and so on.
+- **AI coaching report in Turkish** for each person. It includes the companies in their countries that nobody contacted, as places to explore and grow. You can send it by e-mail or download it as a PDF.
+- **"Your focus" on Today:** the 3 places where effort pays most today, worked out from your customers, countries and fairs.
+  - Examples: "Offers nobody followed up", "Vietnam: 126 companies nobody contacted for a year".
+  - Each card shows its value per year and has one Start button.
+  - "Why this?" shows the calculation; "Not now" hides it.
+- **Design pass:** consistent page headers, real empty states, phone layouts without sideways scrolling, a lower phone top bar, and no developer text shown to staff.
+- **Final quality check:** six reviewers checked how it looks and works, the numbers, permissions, Turkish, speed and the advice. They found about 100 issues; the confirmed ones were fixed and then checked again. Main fixes:
+  - Assistants and people without money access now see no € figures in focus, verdicts or coaching reports.
+  - The yearly budget report now includes costs that were booked on old line names. The SICAM costs were missing before.
+  - "Customers won" at a fair is now counted the same way everywhere.
+  - Trip PDFs and route explanations are in Turkish for Turkish users.
+  - Turkish number and date formats are used in the new screens.
+  - A deleted to-do can be brought back with Undo.
+  - Team and focus pages take under 0.1 seconds.
+
+## Known limits
+- AI coaching and e-mail sending could not be tried here, because there is no AI key and no mailbox. The rules-based version of the report works without a key.
+- Price, team and focus figures come from the sales list in Sales intelligence. If that list is out of date, so are they.
+- The 12-month windows end at the newest sales date, not at the last full month. Changing that would shift every price figure, so it is left for now.
